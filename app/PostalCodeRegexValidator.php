@@ -13,28 +13,35 @@ class PostalCodeRegexValidator {
     
     /**
      * Array with List including the postal codes of all sales guys
-     * @var array
+     * 
      */
-    protected $totalExpressions = [];
+    protected $totalExpressions;
 
      
     /**
      * Array with List including the postal codes of the new sales area
-     * @var array
+     *
      */
-    protected $newExpressions = [];
+    protected $newExpressions;
     
      /**
      * Construct the Validator with the two lists.
      *
-     * @param string $listTotal
-     * @param string $listNew
+     * @param string $totalExpressions
+     * @param string $newExpressions
      */
-    public function __construct($listTotal, $listNew) {
-        //Given list as string converted into array 
-        $totalExpressions = explode (",", $listTotal);
-        $newExpressions = explode (",", $listNew);
-    }
+    public function __construct($totalExpressions, $newExpressions) {
+
+        if(empty($totalExpressions) || empty($newExpressions)) {
+          $this->totalExpressions = null;
+          $this->newExpressions = null;
+        } else {
+          //Given list as string converted into array WITHOUT whitespaces
+          $this->totalExpressions = array_map('trim', explode(",", $totalExpressions));
+          $this->newExpressions = array_map('trim', explode(",", $newExpressions));
+        }
+  
+      }
 
     /**
      * Checks wether the new Postal Codes are already 
@@ -44,7 +51,60 @@ class PostalCodeRegexValidator {
      * @return array
      */
     public function checkExpressions() {
-        $testArray = array("76200", "76299");
-        return $testArray;
+        //----------------------- error cases --------------------------------
+
+        //one of the expression lists is empty
+        if(empty($this->totalExpressions) || empty($this->newExpressions)) {
+            return array("");
+        }
+
+        //letter in totalExpressions array
+        //"/[^\d\*]|.*(?<!\*)$/i" => get each entry that either contains something other than a letter or asteriks,
+        //                          or get each entry that contains an asterik which is not at the end of the string
+        $letterCheckTotal = preg_grep("/[^\d\*]|.*(?<!\*)$/i", $this->totalExpressions);
+        if(!empty($letterCheckTotal)) {
+            $errMessage = array("Error! Wrong postxxxal format in the sales people postals list.");
+            return $errMessage;
+        }
+
+        //letter in newExpressions array
+        $letterCheckNew = preg_grep("/[^\d\*]|.*(?<!\*)$/i", $this->newExpressions);
+        if(!empty($letterCheckNew)) {
+            $errMessage = array("Error! Wrong postal format in the new postal list.");
+            return $errMessage;
+        }
+
+        //get rid of the entries with an asterik at the end (only possible in List of all sales guys)
+        $deletedAsterikEntries = preg_grep("/.\*$|\*/i", $this->totalExpressions);
+        $keys = array_keys($deletedAsterikEntries);
+        foreach ($keys as $keyToDelete) {
+          unset($this->totalExpressions[$keyToDelete]);
+        }
+
+        //one lists contains an entry with more than 5 digits
+        //"/^.{6,}$|^.{1,4}$/" => string length must equal 5 
+        $digitLengthTotal = preg_grep("/^.{6,}$|^.{1,4}$/", $this->totalExpressions);
+        if(!empty($digitLengthTotal)) {
+            $errMessage = array("Error! Wrong postal format in the sales people postals list.");
+            return $errMessage;
+        }
+
+        $digitLengthNew = preg_grep("/^.{6,}$|^.{1,4}$/", $this->newExpressions);
+        if(!empty($digitLengthNew)) {
+            $errMessage = array("Error! Wrong postal format in the new postal list.");
+            return $errMessage;
+        }
+
+       
+
+        
+
+
+
+        //find any entries with asteriks
+
+
+
+        //---------------------- actual function -----------------------------
     }
 }

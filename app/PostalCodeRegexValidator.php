@@ -60,26 +60,33 @@ class PostalCodeRegexValidator {
 
         //letter in totalExpressions array
         //"/[^\d\*]|.*(?<!\*)$/i" => get each entry that either contains something other than a letter or asteriks,
-        //                          or get each entry that contains an asterik which is not at the end of the string
-        $letterCheckTotal = preg_grep("/[^\d\*]|.*(?<!\*)$/i", $this->totalExpressions);
+        //                          OR get each entry that contains an asterik which is not at the end of the string
+        $letterCheckTotal = preg_grep("/[^\d\*]|^.+\*.+$/i", $this->totalExpressions);
         if(!empty($letterCheckTotal)) {
-            $errMessage = array("Error! Wrong postxxxal format in the sales people postals list.");
+            $errMessage = array("Error! Wrong postal format in the sales people postals list.");
             return $errMessage;
         }
 
         //letter in newExpressions array
-        $letterCheckNew = preg_grep("/[^\d\*]|.*(?<!\*)$/i", $this->newExpressions);
+        $letterCheckNew = preg_grep("/[^\d\*]|^.+\*.+$/i", $this->newExpressions);
         if(!empty($letterCheckNew)) {
             $errMessage = array("Error! Wrong postal format in the new postal list.");
             return $errMessage;
         }
 
-        //get rid of the entries with an asterik at the end (only possible in List of all sales guys)
-        $deletedAsterikEntries = preg_grep("/.\*$|\*/i", $this->totalExpressions);
-        $keys = array_keys($deletedAsterikEntries);
+        //get rid of the entries with an asterik at the end 
+        $deletedAsterikEntriesTotal = preg_grep("/.\*$|\*/i", $this->totalExpressions);
+        $keys = array_keys($deletedAsterikEntriesTotal);
         foreach ($keys as $keyToDelete) {
           unset($this->totalExpressions[$keyToDelete]);
         }
+
+        $deletedAsterikEntriesNew = preg_grep("/.\*$|\*/i", $this->newExpressions);
+        $keys = array_keys($deletedAsterikEntriesNew);
+        foreach ($keys as $keyToDelete) {
+          unset($this->newExpressions[$keyToDelete]);
+        }
+
 
         //one lists contains an entry with more than 5 digits
         //"/^.{6,}$|^.{1,4}$/" => string length must equal 5 

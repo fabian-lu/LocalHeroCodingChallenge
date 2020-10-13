@@ -1,5 +1,15 @@
-#Coding Challenge für LocalHero 
+# Coding Challenge for LocalHero
+(task 2 is missing entirely)
 
-app->classes->PostalCodeRegexValidator.php
+**Directory for the validator class:**
 
-command to test: vendor\bin\phpunit 
+	app\PostalCodeRegexValidator.php
+- missing functionality 
+
+<br />
+
+**Directory for the unit test:**
+
+	tests\Feature\FirstTaskTest.php
+
+- command to **test**:  vendor\bin\phpunit

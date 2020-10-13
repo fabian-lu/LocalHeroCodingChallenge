@@ -102,16 +102,68 @@ class PostalCodeRegexValidator {
             return $errMessage;
         }
 
-       
-
-        
-
-
-
-        //find any entries with asteriks
+        //---------------------- actual function TODO-----------------------------
+        //$deletedAsterikEntriesTotal
+        //$deletedAsterikEntriesNew
 
 
+        $matchingPostals = [];
+        foreach ($this->newExpressions as $check) {
+            if(in_array($check, $this->totalExpressions)) {
+                array_push($matchingPostals, $check);
+            }
+          }
 
-        //---------------------- actual function -----------------------------
+        //to validate the test Case testNoMatch
+        if(empty($matchingPostals)) {
+            return array(""); 
+        }
+
+
+        return $matchingPostals;
     }
+
+    
+    /**
+     * ------------------------- TODO -------------------------------
+     * @return array
+     
+    public function appendAsterikEntries($append) {
+
+        foreach ($append as $asterikEntry) {
+            $length = strlen($asterikEntry) - 1; 
+            //german postal codes may start with 0
+            $precedingZeroCount = 0;
+            if($asterikEntry[0] == '0') {
+                int i = 0; 
+                while($asterikEntry[i] == '0') {
+                    $zeroCount++;
+                    i++;
+                }
+            }
+
+            $iterations = pow(10,(5-length));
+            $zeros = strlen((string)($iterations - 1)); 
+
+            for($j = 0; j < $iterations j++) {
+                if(j<10){
+                    System.out.println("0000"+j);
+                }
+                else if(j<100){
+                    System.out.println("000"+j);
+                }
+                else if(j<1000){
+                    System.out.println("00"+j);
+                }
+                else if(j <10000){
+                    System.out.println("0"+j);
+                } else {
+                    System.out.println(j);
+
+                }
+            }
+            
+        }
+    } */
+    
 }

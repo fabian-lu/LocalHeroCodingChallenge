@@ -85,7 +85,7 @@ class FirstTaskTest extends TestCase
     
         $listTotal = "76143, 76141, 76142, 76149, 76148";
         $listNew = "76143, 76141, 76145";
-        $expectedResult = array("76143, 76141");
+        $expectedResult = array("76143", "76141");
         $validator = new PostalCodeRegexValidator($listTotal, $listNew);
         $this->assertEquals($expectedResult, $validator->checkExpressions());
     }
@@ -95,7 +95,7 @@ class FirstTaskTest extends TestCase
     
         $listTotal = "761*, 77777";
         $listNew = "76143, 76141, 71234";
-        $expectedResult = array("76143, 76141");
+        $expectedResult = array("76143", "76141");
         $validator = new PostalCodeRegexValidator($listTotal, $listNew);
         $this->assertEquals($expectedResult, $validator->checkExpressions());
     }
@@ -104,7 +104,7 @@ class FirstTaskTest extends TestCase
     
         $listTotal = "76143, 76141, 76142, 76149, 76148, 77777";
         $listNew = "761*";
-        $expectedResult = array("76143, 76141, 76142, 76149, 76148");
+        $expectedResult = array("76143", "76141", "76142", "76149", "76148");
         $validator = new PostalCodeRegexValidator($listTotal, $listNew);
         $this->assertEquals($expectedResult, $validator->checkExpressions());
     }
